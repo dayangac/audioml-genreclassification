@@ -45,7 +45,7 @@ def columns(names, groups):
 def fit_select(Xtr, ytr, Xva, yva):
     """try multiple setting of the support vector machine, keep the best"""
     best = None
-    # try different C's and gamms
+    # try different C's and gammas
     # C for how much  muistakes are punished
     # gamma for how much similar clips influence results
     for C, gamma in product([0.1, 1, 10, 100], ["scale", 0.001, 0.01]):
