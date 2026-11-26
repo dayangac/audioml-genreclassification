@@ -5,20 +5,23 @@ from sklearn.metrics import accuracy_score
 
 
 def feature_family(name):
-    """'mfcc_mfcc3_mean' -> 'mfcc', 'tempo_bpm' -> 'tempo'."""
+    """takes a feature and returns first part of name, its family"""
     return name.split("_")[0]
 
 
 def group_permutation_importance(model, X, y, groups, n_repeats=20, seed=0):
-    """Accuracy drop (mean, std) per group when its columns are shuffled together."""
-    rng = np.random.default_rng(seed)
-    base = accuracy_score(y, model.predict(X))
-    out = {}
+    """How much model worsens if one group of features is shuffled"""
+    ## setup
+    rng = np.random.default_rng(seed) # random num gen
+    base = accuracy_score(y, model.predict(X)) # accuracy pre-shuffle
+    out = {} # results
     for name, cols in groups.items():
         drops = []
+        # shuffle and test multiple times
         for _ in range(n_repeats):
             Xp = X.copy()
             Xp[:, cols] = X[rng.permutation(len(X))][:, cols]
             drops.append(base - accuracy_score(y, model.predict(Xp)))
         out[name] = (float(np.mean(drops)), float(np.std(drops)))
+    # return average drops
     return out

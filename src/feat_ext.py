@@ -1,3 +1,4 @@
+""" Library from Assestment 1 to extract the features it was used to extract to aid the training of the model"""
 import numpy as np
 
 def zero_crossing_rate(x):
